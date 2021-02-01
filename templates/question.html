@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border='1'>
+            {% for row in questions %}
+                {% if row["id"] == question_id  %}
+                    <tr><h3> {{ row["title"]}}</h3> </tr>
+                    <tr> {{ row["message"]}} </tr>
+                {% endif %}
+            {% endfor %}
+        
+        
+
+    </table>
+    <h4>Comments:</h4>
+    {% for answer in answers %}
+        {% if question_id == answer["question_id"]  %}
+            <tr>
+                {{ answer["message"] }} <br><br>
+                
+               
+            </tr>
+              
+                <td><button type="button"> <a href="delete_answer/{{answer["id"]}}/">Delete answer</a></button></td>
+                <td><button type="button"> <a href="vote_up_answer">Vote up</a></button></td>
+                <small>votes:{{ answer["vote_number"] }}</small> 
+                <td><button type="button"> <a href="vote_down">Vote down</a></button></td>
+                <br><br>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    <br><br>
+    <button type="button"> <a href="edit/">EDIT</a></button><br><br>
+    <button type="button"> <a href="newanswer/">New answer</a></button><br><br>
+    <button type="button"> <a href="delete_question/">Delete question</a></button><br>
+    
+</body>
+</html>

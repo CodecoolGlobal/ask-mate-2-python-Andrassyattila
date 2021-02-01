@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASK MATE 1</title>
+</head>
+<body>
+    <h1>ASK MATE 1</h1>
+    <div name="table">
+        <table border="1">
+            <thead>
+                <tr>
+                    {% for header in TABLE_HEADERS %}
+                        <th>
+                            {{header}}
+                        </th>
+                    {% endfor %}
+                </tr>
+
+            </thead>
+            <tbody>
+                {% for row in sorted_questions %}
+                    <tr>
+                        {% for header in TABLE_HEADERS %}
+                            {% if header=="title" %}
+                                <td><a href="question/{{ row["id"] }}"> {{ row[header] }} </a></td>
+                            {% elif header == "vote_number" %}
+                                <td> 
+                                    {{ row[header] }}<br>
+                                    <a href="/{{row["id"]}}/vote_up">Vote Up</a><br>
+                                    <a href="/{{row["id"]}}/vote_down">Vote Down</a>
+                                </td>
+                            {% elif header == "image" %}
+                                <td><img src={{row["image"]}}></td>
+                            {%else%}
+                                <td> {{ row[header] }} </td>
+                          {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="/add_question">Add a new question</a>
+
+    
+</body>
+</html>
