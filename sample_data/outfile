@@ -1,0 +1,223 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: answer; Type: TABLE; Schema: public; Owner: shadowsamurai
+--
+
+CREATE TABLE public.answer (
+    id integer NOT NULL,
+    submission_time integer,
+    vote_number integer,
+    question_id integer,
+    message character varying(200),
+    image character varying(200)
+);
+
+
+ALTER TABLE public.answer OWNER TO shadowsamurai;
+
+--
+-- Name: comment; Type: TABLE; Schema: public; Owner: shadowsamurai
+--
+
+CREATE TABLE public.comment (
+    id integer NOT NULL,
+    question_id integer,
+    answer_id integer,
+    message character varying(200),
+    submission_time integer,
+    edited_number integer
+);
+
+
+ALTER TABLE public.comment OWNER TO shadowsamurai;
+
+--
+-- Name: question; Type: TABLE; Schema: public; Owner: shadowsamurai
+--
+
+CREATE TABLE public.question (
+    id integer NOT NULL,
+    submission_time bigint,
+    view_number integer,
+    vote_number integer,
+    title character varying(30),
+    message character varying(200),
+    img character varying(200)
+);
+
+
+ALTER TABLE public.question OWNER TO shadowsamurai;
+
+--
+-- Name: question_tag; Type: TABLE; Schema: public; Owner: shadowsamurai
+--
+
+CREATE TABLE public.question_tag (
+    question_id integer,
+    tag_id integer
+);
+
+
+ALTER TABLE public.question_tag OWNER TO shadowsamurai;
+
+--
+-- Name: tag; Type: TABLE; Schema: public; Owner: shadowsamurai
+--
+
+CREATE TABLE public.tag (
+    id integer NOT NULL,
+    name character varying(50)
+);
+
+
+ALTER TABLE public.tag OWNER TO shadowsamurai;
+
+--
+-- Data for Name: answer; Type: TABLE DATA; Schema: public; Owner: shadowsamurai
+--
+
+COPY public.answer (id, submission_time, vote_number, question_id, message, image) FROM stdin;
+\.
+
+
+--
+-- Data for Name: comment; Type: TABLE DATA; Schema: public; Owner: shadowsamurai
+--
+
+COPY public.comment (id, question_id, answer_id, message, submission_time, edited_number) FROM stdin;
+\.
+
+
+--
+-- Data for Name: question; Type: TABLE DATA; Schema: public; Owner: shadowsamurai
+--
+
+COPY public.question (id, submission_time, view_number, vote_number, title, message, img) FROM stdin;
+2	1582358185	12	2	asdasd	frfrefffef	 
+3	1475793243	3	3	asd	asd	 
+4	2686466456	4	2	asd	asd	 
+1	1493368154	29	18	How 33	     I am totally new to this, any hints?	\N
+\.
+
+
+--
+-- Data for Name: question_tag; Type: TABLE DATA; Schema: public; Owner: shadowsamurai
+--
+
+COPY public.question_tag (question_id, tag_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tag; Type: TABLE DATA; Schema: public; Owner: shadowsamurai
+--
+
+COPY public.tag (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: answer answer_pkey; Type: CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.answer
+    ADD CONSTRAINT answer_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: comment comment_pkey; Type: CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT comment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: question question_pkey; Type: CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.question
+    ADD CONSTRAINT question_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tag tag_pkey; Type: CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.tag
+    ADD CONSTRAINT tag_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: answer answer_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.answer
+    ADD CONSTRAINT answer_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.question(id);
+
+
+--
+-- Name: comment comment_answer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT comment_answer_id_fkey FOREIGN KEY (answer_id) REFERENCES public.answer(id);
+
+
+--
+-- Name: comment comment_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT comment_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.question(id);
+
+
+--
+-- Name: comment comment_question_id_fkey1; Type: FK CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT comment_question_id_fkey1 FOREIGN KEY (question_id) REFERENCES public.question(id);
+
+
+--
+-- Name: question_tag question_tag_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.question_tag
+    ADD CONSTRAINT question_tag_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.question(id);
+
+
+--
+-- Name: question_tag question_tag_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: shadowsamurai
+--
+
+ALTER TABLE ONLY public.question_tag
+    ADD CONSTRAINT question_tag_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tag(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
