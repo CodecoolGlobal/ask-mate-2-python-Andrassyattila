@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ASK MATE 1</title>
+    <title>ASK MATE 2</title>
 </head>
 <body>
-    <h1>ASK MATE 1</h1>
+    <h1>ASK MATE 2</h1>
     <div name="table">
         <table border="1">
             <thead>
@@ -19,7 +19,7 @@
 
             </thead>
             <tbody>
-                {% for row in sorted_questions %}
+                {% for row in questions %}
                     <tr>
                         {% for header in TABLE_HEADERS %}
                             {% if header=="title" %}
@@ -31,13 +31,16 @@
                                     <a href="/{{row["id"]}}/vote_down">Vote Down</a>
                                 </td>
                             {% elif header == "image" %}
-                                <td><img src={{row["image"]}}></td>
+                                <td><img src={{row["img"]}}></td>
                             {%else%}
                                 <td> {{ row[header] }} </td>
                           {% endif %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
+            </tbody>
+            <tbody>
+                
             </tbody>
         </table>
     </div>

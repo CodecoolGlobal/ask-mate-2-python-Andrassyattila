@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import data_handler
+import data_manager
 from operator import itemgetter
 import csv
 from datetime import datetime
@@ -34,27 +35,21 @@ def get_id_ans(answers):
 @app.route("/")
 @app.route("/list")
 def list():
-    questions=data_handler.open_db_questions()
-    TABLE_HEADERS = questions[0]
-    sorted_questions = sorted(questions, key=itemgetter("id"), reverse=True)
-    return render_template("list.html", TABLE_HEADERS=TABLE_HEADERS, sorted_questions=sorted_questions, questions=questions, datetime=datetime, int=int)
-
-
-@app.route("/question")
-def return_question():
-    return render_template()
+    TABLE_HEADERS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+    questions = data_manager.get_questions()
+    return render_template("list.html", TABLE_HEADERS=TABLE_HEADERS, questions=questions)
 
 
 @app.route("/question/<string:question_id>/", methods=["POST", "GET"])
 def display_question(question_id):
-    questions = data_handler.open_db_questions()
-    answers = data_handler.open_db_answer()
+    questions = data_manager.get_questions()
+    answers = data_manager.get_answers()
     return render_template("question.html", question_id=question_id, answers=answers, questions=questions)
 
 
 @app.route("/question/<string:question_id>/edit/", methods=["POST", "GET"])
 def edit(question_id):
-    questions = data_handler.open_db_questions()
+    questions = data_manager.get_questions()
     question_to_update = get_data(questions, question_id)
     update_form = dict(request.form)
     if request.method == "POST":
@@ -120,7 +115,7 @@ def answer(question_id):
 @app.route("/<string:question_id>/vote_up", methods=["POST","GET"])
 def vote_up(question_id):
     question_id=question_id
-    questions = data_handler.open_db_questions()
+    questions = data_manager.get_questions()
     question_to_update = get_data(questions, question_id)
     vote = int(question_to_update["vote_number"])
     if request.method == "GET":
@@ -140,7 +135,7 @@ def vote_up(question_id):
 @app.route("/<string:question_id>/vote_down", methods=["POST","GET"])
 def vote_down(question_id):
     question_id = question_id
-    questions = data_handler.open_db_questions()
+    questions = data_manager.get_questions()
     question_to_update = get_data(questions, question_id)
     vote = int(question_to_update["vote_number"])
     if request.method == "GET":
@@ -158,7 +153,7 @@ def vote_down(question_id):
 
 @app.route("/question/<string:question_id>/delete_question/",methods=["POST", "GET"])
 def delete_question(question_id):
-    questions = data_handler.open_db_questions()
+    questions = data_manager.get_questions()
     question_to_update = get_data(questions, question_id)
     if request.method == "GET":
         questions.pop(questions.index(question_to_update))
@@ -171,10 +166,10 @@ def delete_question(question_id):
         return redirect("/list")
 
 
-@app.route("/question/<string:question_id>/delete_answer/<string:answer_id>/",methods=["POST", "GET"])
+@app.route("/question/<string:question_id>/delete_answer/<string:answer_id>/", methods=["POST", "GET"])
 def delete_answer(answer_id,question_id):
     question_id=question_id
-    answers = data_handler.open_db_answer()
+    answers = data_manager.get_answers()
     answer_to_update = get_data(answers, answer_id)
     if request.method == "GET":
         answers.pop(answers.index(answer_to_update))
@@ -190,7 +185,7 @@ def delete_answer(answer_id,question_id):
 @app.route("/question/<string:question_id>/vote_up_answer", methods=["POST", "GET"])
 def vote_up_answer(question_id):
     question_id=question_id
-    answers = data_handler.open_db_answer()
+    answers = data_manager.get_answers()
     answer_to_update = get_data_answer(answers, question_id)
     vote = int(answer_to_update["vote_number"])
     if request.method == "GET":
@@ -209,7 +204,7 @@ def vote_up_answer(question_id):
 @app.route("/question/<string:question_id>/vote_down_aswer", methods=["POST", "GET"])
 def vote_down_answer(question_id):
     question_id = question_id
-    questions = data_handler.open_db_questions()
+    questions = data_manager.get_questions()
     question_to_update = get_data_answer(questions, question_id)
     vote = int(question_to_update["vote_number"])
     if request.method == "GET":

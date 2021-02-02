@@ -9,8 +9,8 @@
     {% for row in questions %}
         {% if row["id"] == question_id  %}
             <form method="post" name="update_question">
-                <input type="text" id="title-input" name="title" value={{ row["title"] }}><br>
-                <textarea id="message-input" name="message"> {{ row["message"] }}</textarea><br>
+                <input type="text" id="title-input" name="update-title" value={{ row["title"] }}><br>
+                <textarea id="message-input" name="update-message"> {{ row["message"] }}</textarea><br>
                 <input type="submit" name="Update">
         {% endif %}
     {% endfor %}
