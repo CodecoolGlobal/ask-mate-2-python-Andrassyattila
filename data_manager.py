@@ -46,7 +46,7 @@ def get_data_answer(cursor: RealDictCursor, id: int) -> list:
 
 
 @database_common.connection_handler
-def add_new_comment(cursor: RealDictCursor,id:int,question_id:int,answer_id:int, message: string,submission_time:int, edited_number:int) -> list:
+def add_new_comment(cursor: RealDictCursor,id:int,question_id:int,answer_id:int, message: str,submission_time:int, edited_number:int) -> list:
     query = """
         INSERT INTO comment(id, question_id, answer_id, message, submission_time, edited_number)
         VALUE %(id)s, %(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_number)s
