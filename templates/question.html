@@ -7,10 +7,8 @@
 <body>
     <table border='1'>
             {% for row in questions %}
-                {% if row["id"] == question_id  %}
-                    <tr><h3> {{ row["title"]}}</h3> </tr>
-                    <tr> {{ row["message"]}} </tr>
-                {% endif %}
+                <tr><h3>{{ row["title"]}}</h3> </tr>
+                <tr> {{ row["message"]}} </tr>
             {% endfor %}
         
         
@@ -18,11 +16,8 @@
     </table>
     <h4>Comments:</h4>
     {% for answer in answers %}
-        {% if question_id == answer["question_id"]  %}
             <tr>
                 {{ answer["message"] }} <br><br>
-                
-               
             </tr>
               
                 <td><button type="button"> <a href="delete_answer/{{answer["id"]}}/">Delete answer</a></button></td>
@@ -31,7 +26,6 @@
                 <td><button type="button"> <a href="vote_down">Vote down</a></button></td>
                 <br><br>
             </tr>
-        {% endif %}
     {% endfor %}
     <br><br>
     <button type="button"> <a href="edit/">EDIT</a></button><br><br>
