@@ -40,7 +40,7 @@ def get_data_answer(cursor: RealDictCursor, id: int) -> list:
     query = """
         SELECT id, submission_time, vote_number, question_id, message, image
         FROM answer
-        WHERE question_id=%(id)s
+        WHERE id=%(id)s
         ORDER BY submission_time"""
     cursor.execute(query, {"id": id})
     return cursor.fetchall()
@@ -95,9 +95,44 @@ def update_question_vote(cursor: RealDictCursor, vote_number:int, id:int) -> lis
 
 @database_common.connection_handler
 def update_answer_vote(cursor: RealDictCursor, vote_number:int, id:int) -> list:
-    query = """
+    query = """i
+        WHERE id = %(id)s
         UPDATE answer
         SET vote_number = %(vote)s
         WHERE id = %(id)s"""
     cursor.execute(query,{"vote":vote_number, "id":id})
 
+
+@database_common.connection_handler
+def get_data_question_vote(cursor: RealDictCursor, id: int) -> int:
+    query = """
+        SELECT vote_number
+        WHERE id = %(id)s
+        FROM question
+        WHERE id=%(id)s
+        """
+    cursor.execute(query, {"id": id})
+    return cursor.fetchall()
+
+@database_common.connection_handler
+def search_question(cursor: RealDictCursor, found_data: str) -> int:
+    phrase = f'%{found_data}%'
+    query = """
+        SELECT id, submission_time, view_number, vote_number, title, message, img
+        FROM question
+        WHERE title LIKE %(found_data)s or message LIKE %(found_data)s
+        """
+    cursor.execute(query, {"found_data": phrase})
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def question_top_five(cursor: RealDictCursor) -> int:
+    query = """
+        SELECT *
+        FROM question
+        ORDER BY submission_time DESC
+        LIMIT 2
+        """
+    cursor.execute(query)
+    return cursor.fetchall()

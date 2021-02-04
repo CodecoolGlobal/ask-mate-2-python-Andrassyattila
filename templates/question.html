@@ -14,12 +14,12 @@
         
 
     </table>
-    <h4>Comments:</h4>
+    <h4>Answers:</h4>
     {% for answer in answers %}
             <tr>
                 {{ answer["message"] }} <br><br>
             </tr>
-              
+                <td><button type="button"> <a href="answer/{{answer["id"]}}/edit/">Edit answer</a></button></td>
                 <td><button type="button"> <a href="delete_answer/{{answer["id"]}}/">Delete answer</a></button></td>
                 <td><button type="button"> <a href="vote_up_answer">Vote up</a></button></td>
                 <small>votes:{{ answer["vote_number"] }}</small> 

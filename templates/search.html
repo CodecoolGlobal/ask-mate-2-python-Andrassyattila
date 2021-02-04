@@ -6,12 +6,7 @@
 </head>
 <body>
     <h1>ASK MATE 2</h1>
-    <h3>Search in questions:</h3>
-    <form action="/search">
-        <input type="search" name="q"><br>
-        <button type="submit">Search</button>
-    </form>
-    <br>
+    <h3>Search for {{found_data}}</h3>
     <div name="table">
         <table border="1">
             <thead>
@@ -25,12 +20,10 @@
 
             </thead>
             <tbody>
-                {% for row in questions %}
+                {% for row in found %}
                     <tr>
                         {% for header in TABLE_HEADERS %}
-                            {%if header=="submission_time"%}
-                                    {{row[header]}}
-                            {% elif header=="title" %}
+                            {% if header=="title" %}
                                 <td><a href="question/{{ row["id"] }}"> {{ row[header] }} </a></td>
                             {% elif header == "vote_number" %}
                                 <td> 
@@ -52,8 +45,5 @@
             </tbody>
         </table>
     </div>
-    <a href="/add_question">Add a new question</a>
-
-    
 </body>
 </html>

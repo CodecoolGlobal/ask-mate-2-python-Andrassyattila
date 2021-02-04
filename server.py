@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect
-import data_handler
 import data_manager
 from operator import itemgetter
 import csv
@@ -8,6 +7,11 @@ from datetime import datetime
 app = Flask(__name__)
 
 @app.route("/")
+def top5():
+    TABLE_HEADERS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+    questions = data_manager.question_top_five()
+    return render_template("index.html", TABLE_HEADERS=TABLE_HEADERS, questions=questions)
+    
 @app.route("/list")
 def list():
     TABLE_HEADERS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
@@ -38,7 +42,7 @@ def edit(question_id):
 @app.route("/add_question", methods=["POST", "GET"])
 def question():
     if request.method == "POST":
-        data_manager.add_new_question(0, 0, 0, request.form["question_name"], request.form["description"], "")
+        data_manager.add_new_question(datetime.now().timestamp(), 0, 0, request.form["question_name"], request.form["description"], "")
         return redirect("/list")
     return render_template("add-question.html")
 
@@ -55,9 +59,10 @@ def answer(question_id):
 @app.route("/<string:question_id>/vote_up", methods=["POST","GET"])
 def vote_up(question_id):
     question_id=question_id
-    question_to_update = data_manager.get_data_question(question_id)
-    vote = int(question_to_update["vote_number"])
+    vote_a = data_manager.get_data_question_vote(question_id)
+    vote=int(vote_a[-1])
     if request.method == "GET":
+        print(vote)
         vote += 1
         data_manager.update_question_vote(vote, question_id)
         return redirect("/list")
@@ -113,7 +118,7 @@ def delete_answer(answer_id,question_id):
         return redirect("/list")
 
 
-@app.route("/question/<string:question_id>/vote_up_answer", methods=["POST", "GET"])
+'''@app.route("/question/<string:question_id>/vote_up_answer", methods=["POST", "GET"])
 def vote_up_answer(question_id):
     question_id=question_id
     answers = data_manager.get_answers()
@@ -149,7 +154,30 @@ def vote_down_answer(question_id):
             writer.writeheader()
             for row in questions:
                 writer.writerow(row)
-        return redirect("/list")
+        return redirect("/list")'''
+
+
+@app.route("/search/", methods=["POST", "GET"])
+def search_question():
+    TABLE_HEADERS = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+    found_data = request.args.get('q')
+    if found_data:
+        found = data_manager.search_question(found_data)
+    return render_template("search.html", found= found, found_data=found_data, TABLE_HEADERS=TABLE_HEADERS)
+
+
+@app.route("/question/<question_id>/answer/<string:answer_id>/edit/", methods=["POST", "GET"])
+def edit_answer(answer_id, question_id):
+    answer_to_update = data_manager.get_data_answer(answer_id)
+    if request.method == "POST":
+        new_message = request.form["update-message"]
+        data_manager.update_question(new_message, answer_id)
+        return redirect("/question/"+question_id)
+    else:
+        
+        return render_template("edit.html",question_id=question_id, answer_id=answer_id, answer_to_update=answer_to_update)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True

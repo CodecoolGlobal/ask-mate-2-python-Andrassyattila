@@ -5,25 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-    {%if question_to_update%}
     <h1>Edit a question</h1>
     {% for row in question_to_update %}
             <form method="post" name="update_question">
                 <input type="text" id="title-input" name="update-title" value={{ row["title"] }}><br>
                 <textarea id="message-input" name="update-message"> {{ row["message"] }}</textarea><br>
                 <input type="submit" name="Update">
-            </form>
     {% endfor %}
-    {%endif%}   
-    {%if answer_to_update%}
-    <h1>Edit an answer</h1>
-    {% for row in answer_to_update %}
-            <form method="post" name="update_answer">
-                <textarea id="message-input" name="update-message"> {{ row["message"] }}</textarea><br>
-                <input type="submit" name="Update">
+    
             </form>
-    {% endfor %}
-
-    {%endif%}  
+           
 </body>
 </html>
