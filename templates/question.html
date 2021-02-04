@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Ask mate2 question</title>
-    <link rel="stylesheet" href="static/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
     <table border='1'>
             {% for row in questions %}
-                <tr><h3>{{ row["title"]}}</h3> </tr>
-                <tr> {{ row["message"]}} </tr>
+                <tr>
+                    <td>
+                        <h3>{{ row["title"]}}</h3>
+                    </td>
+                <tr> 
+                    <td>
+                        {{ row["message"]}}
+                    </td>
+                </tr>
             {% endfor %}
     </table>
     <button type="button"> <a href="comment_to_question">New comment to this question</a></button><br><br>

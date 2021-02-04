@@ -1,4 +1,32 @@
 * {
-    margin: 0;
-    padding: 0;
+    margin: 10px;
+    color: rgb(2, 8, 135);
+}
+
+h1 {
+    font-style: italic;
+    text-align: center;
+}
+
+body {
+    text-align: center;
+}
+
+a {
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+table {
+    background-color: rgb(156, 205, 231);
+    width: 1200px;
+    border-style: solid;
+    border: solid;
+    border-color: black;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+html {
+    background-color: rgb(204, 230, 244);
 }
