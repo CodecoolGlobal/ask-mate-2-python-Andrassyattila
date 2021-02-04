@@ -104,7 +104,6 @@ def update_answer_vote(cursor: RealDictCursor, vote_number:int, id:int) -> list:
 
 
 @database_common.connection_handler
-<<<<<<< HEAD
 def get_data_question_vote(cursor: RealDictCursor, id: int) -> int:
     query = """
         SELECT vote_number
@@ -137,7 +136,6 @@ def question_top_five(cursor: RealDictCursor) -> int:
         """
     cursor.execute(query)
     return cursor.fetchall()
-=======
 def select_comments(cursor: RealDictCursor, question_id:int) -> list:
     query = """
         SELECT message FROM comment
@@ -162,4 +160,3 @@ def select_comments_to_answer(cursor: RealDictCursor, answer_id:int) -> list:
         WHERE answer_id = '{}'""".format(answer_id)
     cursor.execute(query)
     return cursor.fetchall()
->>>>>>> a2b58523f31006c2fa0c981c8b83f48543184db2

@@ -12,8 +12,6 @@
                 <tr> {{ row["message"]}} </tr>
             {% endfor %}
     </table>
-<<<<<<< HEAD
-=======
     <button type="button"> <a href="comment_to_question">New comment to this question</a></button><br><br>
     <h4>
         Comments:
@@ -21,7 +19,6 @@
             {{comment['message']}} <br>
         {% endfor %}
     </h4>
->>>>>>> a2b58523f31006c2fa0c981c8b83f48543184db2
     <h4>Answers:</h4>
     {% for answer in answers %}
     {% for comment in comments_to_answer%}
