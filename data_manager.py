@@ -24,6 +24,14 @@ def get_answers(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+@database_common.connection_handler
+def get_comments(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM comment
+        ORDER BY submission_time"""
+    cursor.execute(query)
+    return cursor.fetchall()
 
 @database_common.connection_handler
 def get_data_question(cursor: RealDictCursor, id: int) -> list:
@@ -44,6 +52,30 @@ def get_data_answer(cursor: RealDictCursor, id: int) -> list:
         ORDER BY submission_time"""
     cursor.execute(query, {"id": id})
     return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_data_answer_question(cursor: RealDictCursor, question_id: int) -> list:
+    query = """
+        SELECT id, submission_time, vote_number, question_id, message, image
+        FROM answer
+        WHERE question_id=%(question_id)s
+        ORDER BY submission_time"""
+    cursor.execute(query, {"question_id": question_id})
+    return cursor.fetchall()
+
+
+
+@database_common.connection_handler
+def get_data_comment(cursor: RealDictCursor, id: int) -> list:
+    query = """
+        SELECT question_id, message, submission_time, edited_number
+        FROM comment
+        WHERE id=%(id)s
+        ORDER BY submission_time"""
+    cursor.execute(query, {"id": id})
+    return cursor.fetchall()
+
 
 
 @database_common.connection_handler
@@ -136,9 +168,11 @@ def question_top_five(cursor: RealDictCursor) -> int:
         """
     cursor.execute(query)
     return cursor.fetchall()
-def select_comments(cursor: RealDictCursor, question_id:int) -> list:
+
+
+def select_comments(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-        SELECT message FROM comment
+        SELECT * FROM comment
         WHERE question_id = '{}'""".format(question_id)
     cursor.execute(query)
     return cursor.fetchall()
@@ -154,9 +188,9 @@ def add_new_comment_to_answer(cursor: RealDictCursor, answer_id: int, message: s
 
 
 @database_common.connection_handler
-def select_comments_to_answer(cursor: RealDictCursor, answer_id:int) -> list:
+def select_comments_to_answer(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-        SELECT message FROM comment
-        WHERE answer_id = '{}'""".format(answer_id)
+        SELECT * FROM comment
+        WHERE answer_id = '{}'""".format(question_id)
     cursor.execute(query)
     return cursor.fetchall()

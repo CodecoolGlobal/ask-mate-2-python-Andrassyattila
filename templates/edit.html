@@ -25,5 +25,16 @@
     {% endfor %}
 
     {%endif%}  
+
+    {%if comment_to_update%}
+    <h1>Edit comment</h1>
+    {% for row in answer_to_update %}
+            <form method="post" name="update_comment">
+                <textarea id="message-input" name="update-message"> {{ row["message"] }}</textarea><br>
+                <input type="submit" name="Update">
+            </form>
+    {% endfor %}
+
+    {%endif%}  
 </body>
 </html>

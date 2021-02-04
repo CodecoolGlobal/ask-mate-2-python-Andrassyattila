@@ -21,13 +21,17 @@
     </h4>
     <h4>Answers:</h4>
     {% for answer in answers %}
-    {% for comment in comments_to_answer%}
             <tr>
                 {{ answer["message"] }} <br><br>
                 Comments: <br>
-                {{comment['message']}} <br>
-                <button type="button"> <a href="comment_to_question">New comment to this answer</a></button><br><br>
+                {% for comment in comments%}
+                    {%if comment['answer_id'] == answer['id']%}
+                    {{comment['message']}} <br>
+                    <button type="button"> <a href="comment_to_question">New comment to this answer</a></button><br><br>
+                    {%endif%}   
+                {%endfor%}     
             </tr>
+            <tr>
                 <td><button type="button"> <a href="answer/{{answer["id"]}}/edit/">Edit answer</a></button></td>
                 <td><button type="button"> <a href="delete_answer/{{answer["id"]}}/">Delete answer</a></button></td>
                 <td><button type="button"> <a href="vote_up_answer">Vote up</a></button></td>

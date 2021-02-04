@@ -20,12 +20,11 @@ def list():
 
 
 @app.route("/question/<string:question_id>/", methods=["POST", "GET"])
-def display_question(question_id, answer_id):
+def display_question(question_id):
     questions = data_manager.get_data_question(question_id)
     answers = data_manager.get_answers()
-    newcomment = data_manager.select_comments(question_id)
-    newcomment_to_answer = data_manager.select_comments_to_answer(answer_id)
-    return render_template("question.html", question_id=question_id, answers=answers, questions=questions, comments=newcomment, comments_to_answer=newcomment_to_answer)
+    comments = data_manager.get_comments()
+    return render_template("question.html", question_id=question_id, answers=answers, questions=questions, comments=comments)
 
 
 @app.route("/question/<string:question_id>/edit/", methods=["POST", "GET"])
@@ -199,6 +198,20 @@ def edit_answer(answer_id, question_id):
     else:
         
         return render_template("edit.html",question_id=question_id, answer_id=answer_id, answer_to_update=answer_to_update)
+
+
+@app.route("/question/<question_id>/comment/<string:comment_id>/edit/", methods=["POST", "GET"])
+def edit_comment(comment_id, question_id):
+    comment_to_update = data_manager.get_data_comment(comment_id)
+    if request.method == "POST":
+        new_message = request.form["update-message"]
+        data_manager.update_question(new_message, comment_id)
+        return redirect("/question/"+question_id)
+    else:
+        
+        return render_template("edit.html",question_id=question_id, comment_id=comment_id, comment_to_update=comment_to_update)
+
+
 
 
 if __name__ == "__main__":

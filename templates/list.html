@@ -29,9 +29,7 @@
                 {% for row in questions %}
                     <tr>
                         {% for header in TABLE_HEADERS %}
-                            {%if header=="submission_time"%}
-                                    {{row[header]}}
-                            {% elif header=="title" %}
+                            {% if header=="title" %}
                                 <td><a href="question/{{ row["id"] }}"> {{ row[header] }} </a></td>
                             {% elif header == "vote_number" %}
                                 <td> 
