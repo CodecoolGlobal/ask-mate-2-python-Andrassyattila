@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ask mate2 question</title>
+    <link rel="stylesheet" href="static/main.css">
 </head>
 <body>
     <table border='1'>
@@ -10,14 +11,25 @@
                 <tr><h3>{{ row["title"]}}</h3> </tr>
                 <tr> {{ row["message"]}} </tr>
             {% endfor %}
-        
-        
-
     </table>
+<<<<<<< HEAD
+=======
+    <button type="button"> <a href="comment_to_question">New comment to this question</a></button><br><br>
+    <h4>
+        Comments:
+        {% for comment in comments%}
+            {{comment['message']}} <br>
+        {% endfor %}
+    </h4>
+>>>>>>> a2b58523f31006c2fa0c981c8b83f48543184db2
     <h4>Answers:</h4>
     {% for answer in answers %}
+    {% for comment in comments_to_answer%}
             <tr>
                 {{ answer["message"] }} <br><br>
+                Comments: <br>
+                {{comment['message']}} <br>
+                <button type="button"> <a href="comment_to_question">New comment to this answer</a></button><br><br>
             </tr>
                 <td><button type="button"> <a href="answer/{{answer["id"]}}/edit/">Edit answer</a></button></td>
                 <td><button type="button"> <a href="delete_answer/{{answer["id"]}}/">Delete answer</a></button></td>
