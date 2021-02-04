@@ -10,30 +10,38 @@
             {% for row in questions %}
                 <tr>
                     <td>
-                        <h3>{{ row["title"]}}</h3>
+                        <h1>{{ row["title"]}}</h1>
                     </td>
                 <tr> 
                     <td>
-                        {{ row["message"]}}
+                        <h2>{{ row["message"]}}</h2>
                     </td>
                 <tr>
-                    <td>{%for tag in tags%}<button type="button"> {{tag.name}}</button> {%endfor%}
+                    {% if tags %}
+                    <td>
+                        {%for tag in tags%}<button type="button"> {{tag.name}}</button> {%endfor%}
                     </td>
-                    </tr><br><br>
-                <tr> 
-                    <a href="{{url_for("delete_question", question_id=row.id)}}">DELETE</a>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>
+                        <a href="{{url_for("delete_question", question_id=row.id)}}">DELETE</a>
+                    </td>
                 </tr>
             {% endfor %}
     </table>
     <button type="button"> <a href="comment_to_question">New comment to this question</a></button><br><br>
     <button type="button"> <a href="tag">New tag</a></button><br><br>
     <h4>
-        Comments:
+        Comments: <br>
         {% for comment in comments%}
+            <br>
             {{comment['message']}} <br>
+            <br>
         {% endfor %}
     </h4>
-    <h4>Answers:</h4>
+    <h2>Answers:</h2>
+    <h3>
     {% for answer in answers %}
             <tr>
                 {{ answer["message"] }} <br><br>
@@ -55,6 +63,7 @@
                 <br><br>
             </tr>
     {% endfor %}
+    </h3>
     <br><br>
     <button type="button"> <a href="edit/">EDIT</a></button><br><br>
     <button type="button"> <a href="newanswer/">New answer</a></button><br><br>
