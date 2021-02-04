@@ -24,6 +24,16 @@ def get_answers(cursor: RealDictCursor) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+
+@database_common.connection_handler
+def get_tags(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT name
+        FROM tag
+        ORDER BY name"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
 @database_common.connection_handler
 def get_comments(cursor: RealDictCursor) -> list:
     query = """
@@ -194,3 +204,41 @@ def select_comments_to_answer(cursor: RealDictCursor, question_id: int) -> list:
         WHERE answer_id = '{}'""".format(question_id)
     cursor.execute(query)
     return cursor.fetchall()
+
+@database_common.connection_handler
+def delete_question(cursor: RealDictCursor, question_id: int) -> list:
+    query = """
+    DELETE FROM question WHERE id=%(question_id)s"""
+    cursor.execute(query, {"question_id": question_id})
+    
+
+@database_common.connection_handler
+def delete_answer(cursor: RealDictCursor, answer_id: int) -> list:
+    query = """
+    DELETE FROM answer WHERE id=%(answer_id)s"""
+    cursor.execute(query, {"answer_id": answer_id})
+
+
+@database_common.connection_handler
+def delete_comment(cursor: RealDictCursor, comment_id: int) -> list:
+    query = """
+    DELETE FROM comment WHERE id=%(comment_id)s"""
+    cursor.execute(query, {"comment_id": comment_id})
+
+
+@database_common.connection_handler
+def add_new_tag(cursor: RealDictCursor, tag:str) -> list:
+    query = """
+        INSERT INTO tag(name)
+        VALUES (%(tag)s)
+        """
+    cursor.execute(query, {"tag":tag})
+
+
+@database_common.connection_handler
+def tag_to_question(cursor: RealDictCursor, question_id: int, tag_id:int) -> list:
+    query = """
+        INSERT INTO question_tag(question_id, tag_id)
+        VALUES (%(question_id)s, %(tag_id)s)
+        """
+    cursor.execute(query, {"question_id":question_id,"tag_id":tag_id})

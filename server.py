@@ -24,7 +24,8 @@ def display_question(question_id):
     questions = data_manager.get_data_question(question_id)
     answers = data_manager.get_answers()
     comments = data_manager.get_comments()
-    return render_template("question.html", question_id=question_id, answers=answers, questions=questions, comments=comments)
+    tags=data_manager.get_tags()
+    return render_template("question.html", question_id=question_id, answers=answers, questions=questions, comments=comments, tags=tags)
 
 
 @app.route("/question/<string:question_id>/edit/", methods=["POST", "GET"])
@@ -109,35 +110,26 @@ def vote_down(question_id):
                 writer.writerow(row)
         return redirect("/list")
 
-@app.route("/question/<string:question_id>/delete_question/",methods=["POST", "GET"])
+@app.route("/question/<int:question_id>/delete_question/", methods=["POST", "GET"])
 def delete_question(question_id):
-    questions = data_manager.get_questions()
-    question_to_update = get_data(questions, question_id)
     if request.method == "GET":
-        questions.pop(questions.index(question_to_update))
-        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
-                fieldnames = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
-                for row in questions:
-                    writer.writerow(row)
+        question_id=question_id
+        data_manager.delete_question(question_id)
         return redirect("/list")
 
 
 @app.route("/question/<string:question_id>/delete_answer/<string:answer_id>/", methods=["POST", "GET"])
-def delete_answer(answer_id,question_id):
-    question_id=question_id
-    answers = data_manager.get_answers()
-    answer_to_update = get_data(answers, answer_id)
+def delete_answer(answer_id, question_id):
     if request.method == "GET":
-        answers.pop(answers.index(answer_to_update))
-        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/answer.csv", 'w', newline='') as csvfile:
-            fieldnames = ["id","submission_time","vote_number","question_id","message","image"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in answers:
-                writer.writerow(row)
-        return redirect("/list")
+        data_manager.delete_answer(answer_id)
+        return redirect("/question/"+question_id)
+
+
+@app.route("/question/<string:question_id>/delete_comment/<string:comment_id>/", methods=["POST", "GET"])
+def delete_comment(comment_id, question_id):
+    if request.method == "GET":
+        data_manager.delete_comment(comment_id)
+        return redirect("/question/"+question_id)
 
 
 '''@app.route("/question/<string:question_id>/vote_up_answer", methods=["POST", "GET"])
@@ -211,6 +203,16 @@ def edit_comment(comment_id, question_id):
         
         return render_template("edit.html",question_id=question_id, comment_id=comment_id, comment_to_update=comment_to_update)
 
+@app.route("/question/<string:question_id>/tag/", methods=["POST", "GET"])
+def add_tag(question_id):
+    tags=data_manager.get_tags()
+    if request.method == "POST":
+        new_tag=request.form["tag-name"]
+        data_manager.add_new_tag(new_tag)
+        data_manager.tag_to_question(question_id,new_tag)
+        return redirect("/question/"+question_id)
+    else:
+        return render_template("tag.html",question_id=question_id,tags=tags)
 
 
 

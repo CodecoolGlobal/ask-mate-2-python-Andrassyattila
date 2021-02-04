@@ -16,10 +16,17 @@
                     <td>
                         {{ row["message"]}}
                     </td>
+                <tr>
+                    <td>{%for tag in tags%}<button type="button"> {{tag.name}}</button> {%endfor%}
+                    </td>
+                    </tr><br><br>
+                <tr> 
+                    <a href="{{url_for("delete_question", question_id=row.id)}}">DELETE</a>
                 </tr>
             {% endfor %}
     </table>
     <button type="button"> <a href="comment_to_question">New comment to this question</a></button><br><br>
+    <button type="button"> <a href="tag">New tag</a></button><br><br>
     <h4>
         Comments:
         {% for comment in comments%}
@@ -35,6 +42,7 @@
                     {%if comment['answer_id'] == answer['id']%}
                     {{comment['message']}} <br>
                     <button type="button"> <a href="comment_to_question">New comment to this answer</a></button><br><br>
+                    <button type="button"> <a href="delete_comment/{{comment["id"]}}/">Delete comment</a></button><br><br>
                     {%endif%}   
                 {%endfor%}     
             </tr>
@@ -50,7 +58,6 @@
     <br><br>
     <button type="button"> <a href="edit/">EDIT</a></button><br><br>
     <button type="button"> <a href="newanswer/">New answer</a></button><br><br>
-    <button type="button"> <a href="delete_question/">Delete question</a></button><br>
-    
+   
 </body>
 </html>

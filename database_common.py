@@ -9,8 +9,8 @@ import psycopg2.extras
 def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first
-    user_name = 'shadowsamurai'
-    password = 'password'
+    user_name = 'gergely'
+    password = 'xxx123'
     host = 'localhost'
     database_name = 'ask_mate2'
 

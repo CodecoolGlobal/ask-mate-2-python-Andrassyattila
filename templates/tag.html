@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new tag</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+<body>
+    <h1>Add tag to question</h1>
+    {%for tag in tags%}
+        <button type="button">{{tag.name}}</button>
+    {%endfor%}
+    <br><br>
+    <form action="/question/{{question_id}}/tag/" method="POST">
+        <input type="text" name="tag-name">
+        <input type="submit">
+    </form>
+           
+</body>
+</html>
