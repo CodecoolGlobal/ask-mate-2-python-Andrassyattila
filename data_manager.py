@@ -47,12 +47,12 @@ def get_data_answer(cursor: RealDictCursor, id: int) -> list:
 
 
 @database_common.connection_handler
-def add_new_comment(cursor: RealDictCursor, question_id: int, answer_id: int, message: str, submission_time: int, edited_number: int) -> list:
+def add_new_comment(cursor: RealDictCursor, question_id: int, message: str, submission_time: int, edited_number: int) -> list:
     query = """
-        INSERT INTO comment(id, question_id, answer_id, message, submission_time, edited_number)
-        VALUES (%(id)s, %(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, %(edited_number)s)
+        INSERT INTO comment(question_id, message, submission_time, edited_number)
+        VALUES (%(question_id)s, %(message)s, %(submission_time)s, %(edited_number)s)
         """
-    cursor.execute(query, {"id": id, "question_id": question_id, "answer_id": answer_id, "message": message, "submission_time": submission_time, "edited_number": edited_number})
+    cursor.execute(query, {"question_id": question_id, "message": message, "submission_time": submission_time, "edited_number": edited_number})
 
 
 
@@ -101,3 +101,29 @@ def update_answer_vote(cursor: RealDictCursor, vote_number:int, id:int) -> list:
         WHERE id = %(id)s"""
     cursor.execute(query,{"vote":vote_number, "id":id})
 
+
+@database_common.connection_handler
+def select_comments(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+        SELECT message FROM comment
+        WHERE question_id = '{}'""".format(question_id)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def add_new_comment_to_answer(cursor: RealDictCursor, answer_id: int, message: str, submission_time: int, edited_number: int) -> list:
+    query = """
+        INSERT INTO comment(answer_id, message, submission_time, edited_number)
+        VALUES (%(answer_id)s, %(message)s, %(submission_time)s, %(edited_number)s)
+        """
+    cursor.execute(query, {"answer_id": answer_id, "message": message, "submission_time": submission_time, "edited_number": edited_number})
+
+
+@database_common.connection_handler
+def select_comments_to_answer(cursor: RealDictCursor, answer_id:int) -> list:
+    query = """
+        SELECT message FROM comment
+        WHERE answer_id = '{}'""".format(answer_id)
+    cursor.execute(query)
+    return cursor.fetchall()

@@ -16,10 +16,12 @@ def list():
 
 
 @app.route("/question/<string:question_id>/", methods=["POST", "GET"])
-def display_question(question_id):
+def display_question(question_id, answer_id):
     questions = data_manager.get_data_question(question_id)
     answers = data_manager.get_answers()
-    return render_template("question.html", question_id=question_id, answers=answers, questions=questions)
+    newcomment = data_manager.select_comments(question_id)
+    newcomment_to_answer = data_manager.select_comments_to_answer(answer_id)
+    return render_template("question.html", question_id=question_id, answers=answers, questions=questions, comments=newcomment, comments_to_answer=newcomment_to_answer)
 
 
 @app.route("/question/<string:question_id>/edit/", methods=["POST", "GET"])
@@ -51,6 +53,27 @@ def answer(question_id):
     return render_template("newanswer.html")
 
 
+@app.route("/question/<string:question_id>/comment_to_question", methods=["POST", "GET"])
+def comment_to_question(question_id):
+    if request.method == "POST":
+        comment = request.form.get("comment")
+        data_manager.add_new_comment(question_id,comment,0,0)
+        
+        return redirect("/question/"+question_id)
+    else:
+        return render_template("comment_to_question.html")
+
+
+@app.route("/question/<string:question_id>/comment_to_answer", methods=["POST", "GET"])
+def comment_to_answer(question_id, answer_id):
+    if request.method == "POST":
+        comment = request.form.get("comment")
+        data_manager.add_new_answer(answer_id,comment,0,0)
+        
+        return redirect("/question/"+question_id)
+    else:
+        return render_template("comment_to_answer.html")
+
 
 @app.route("/<string:question_id>/vote_up", methods=["POST","GET"])
 def vote_up(question_id):
@@ -74,7 +97,7 @@ def vote_down(question_id):
         question_to_update["vote_number"]=str(vote)
         questions.pop(questions.index(question_to_update))
         questions.append(question_to_update)
-        with open("/home/gergely/projects/2.module/ask-mate-1-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
+        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
             fieldnames = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -88,7 +111,7 @@ def delete_question(question_id):
     question_to_update = get_data(questions, question_id)
     if request.method == "GET":
         questions.pop(questions.index(question_to_update))
-        with open("/home/gergely/projects/2.module/ask-mate-1-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
+        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
                 fieldnames = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
@@ -104,7 +127,7 @@ def delete_answer(answer_id,question_id):
     answer_to_update = get_data(answers, answer_id)
     if request.method == "GET":
         answers.pop(answers.index(answer_to_update))
-        with open("/home/gergely/projects/2.module/ask-mate-1-python-Andrassyattila/sample_data/answer.csv", 'w', newline='') as csvfile:
+        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/answer.csv", 'w', newline='') as csvfile:
             fieldnames = ["id","submission_time","vote_number","question_id","message","image"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -124,7 +147,7 @@ def vote_up_answer(question_id):
         answer_to_update["vote_number"]=str(vote)
         answers.pop(answers.index(answer_to_update))
         answers.append(answer_to_update)
-        with open("/home/gergely/projects/2.module/ask-mate-1-python-Andrassyattila/sample_data/answer.csv", 'w', newline='') as csvfile:
+        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/answer.csv", 'w', newline='') as csvfile:
             fieldnames = ["id","submission_time","vote_number","question_id","message,image"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -143,7 +166,7 @@ def vote_down_answer(question_id):
         question_to_update["vote_number"]=str(vote)
         questions.pop(questions.index(question_to_update))
         questions.append(question_to_update)
-        with open("/home/gergely/projects/2.module/ask-mate-1-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
+        with open("/home/shadowsamurai/gitdir/ask-mate-2-python-Andrassyattila/sample_data/question.csv", 'w', newline='') as csvfile:
             fieldnames = ["id","submission_time","vote_number","question_id","message,image"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
